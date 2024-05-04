@@ -11,5 +11,7 @@ public class School {
     int id;
     String name;
     String address;
-    List<String> dresscodColor;
+    List<String> dressCodeColors;
+
+
 }
