@@ -1,15 +1,15 @@
 package com.springboot.crudoperation.service;
 
-import com.springboot.crudoperation.model.School;
+import com.springboot.crudoperation.model.SchoolDto;
 
 import java.util.Map;
 
 public interface SchoolService {
 
-      School saveSchool(School school);
-      School updateSchool(School school) throws Exception;
+      SchoolDto saveSchool(SchoolDto schoolDto);
+      SchoolDto updateSchool(SchoolDto schoolDto) throws Exception;
 
-      School findSchoolById(int schoolId);
+      SchoolDto findSchoolById(int schoolId);
 
       Map deleteSchool(int schoolId);
 }

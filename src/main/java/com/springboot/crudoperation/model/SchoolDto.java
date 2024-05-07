@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class School {
+public class SchoolDto {
     int id;
     String name;
     String address;
