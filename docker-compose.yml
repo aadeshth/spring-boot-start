@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql
+    volumes:
+      - "./.data/db:/var/lib/msql"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: school
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - 42333:3306
