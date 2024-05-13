@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class SchoolDto {
-    int id;
+    Long id;
     String name;
     String address;
     List<String> dressCodeColors;
