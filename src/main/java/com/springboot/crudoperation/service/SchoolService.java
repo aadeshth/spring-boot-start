@@ -11,5 +11,5 @@ public interface SchoolService {
 
       SchoolDto findSchoolById(int schoolId);
 
-      Map deleteSchool(int schoolId);
+      void deleteSchool(int schoolId);
 }

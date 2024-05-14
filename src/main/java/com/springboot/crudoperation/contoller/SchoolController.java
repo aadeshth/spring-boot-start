@@ -71,7 +71,8 @@ public School getSchoolDetails2()
     @DeleteMapping(value = "/{schoolId}")
     public ResponseEntity<?> deleteSchool(@PathVariable int schoolId)
     {
-        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Record Deleted!").data(schoolService.deleteSchool(schoolId)).build(), HttpStatus.OK);
+        schoolService.deleteSchool(schoolId);
+        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Record Deleted!").build(), HttpStatus.OK);
     }
 
 }
