@@ -55,8 +55,7 @@ public School getSchoolDetails2()
 
 
     @PostMapping
-    public ResponseEntity<?> createSchool(@RequestBody SchoolDto request)
-    {
+    public ResponseEntity<?> createSchool(@RequestBody SchoolDto request)  {
         return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Created Successfully").data(schoolService.saveSchool(request)).build(), HttpStatus.OK);
     }
 
