@@ -9,8 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Entity(name = "school_tbl")
-//@Table(name = "school_tbl")
+@Entity(name = "School")
+@Table(name = "school_tbl")
 @Getter
 @Setter
 public class School extends BaseEntity {

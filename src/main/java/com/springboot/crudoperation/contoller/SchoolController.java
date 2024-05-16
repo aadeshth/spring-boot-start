@@ -2,6 +2,7 @@ package com.springboot.crudoperation.contoller;
 
 import com.springboot.crudoperation.model.ResponseDto;
 import com.springboot.crudoperation.model.SchoolDto;
+import com.springboot.crudoperation.model.SearchRequest;
 import com.springboot.crudoperation.service.SchoolService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 @RestController
@@ -47,11 +52,11 @@ public School getSchoolDetails2()
         return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").data(schoolService.findSchoolById(schoolId)).build(), HttpStatus.OK);
     }
 
-    @GetMapping
+   /* @GetMapping
     public ResponseEntity<?> getSchool(@RequestParam(value = "schoolID" , required = false) int schoolId)
     {
         return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").data(schoolService.findSchoolById(schoolId)).build(), HttpStatus.OK);
-    }
+    }*/
 
 
     @PostMapping
@@ -74,4 +79,11 @@ public School getSchoolDetails2()
         return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Record Deleted!").build(), HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<?> searchSchools(@RequestParam(value = "searchText" , required = false) String searchText)
+    {
+        List<SchoolDto> list = schoolService.findSchoolBySearchText(searchText);
+        System.out.println(list);
+        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").listData(Collections.singletonList(list)).build(), HttpStatus.OK);
+    }
 }

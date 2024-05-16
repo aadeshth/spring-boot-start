@@ -1,6 +1,9 @@
 package com.springboot.crudoperation.service;
 
 import com.springboot.crudoperation.model.SchoolDto;
+import com.springboot.crudoperation.model.SearchRequest;
+
+import java.util.List;
 
 
 public interface SchoolService {
@@ -11,4 +14,6 @@ public interface SchoolService {
       SchoolDto findSchoolById(int schoolId);
 
       void deleteSchool(int schoolId);
+
+      List<SchoolDto> findSchoolBySearchText(String searchText);
 }

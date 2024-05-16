@@ -4,6 +4,7 @@ import com.springboot.crudoperation.entity.School;
 import com.springboot.crudoperation.exception.DataNotFoundException;
 import com.springboot.crudoperation.mapper.SchoolMapper;
 import com.springboot.crudoperation.model.SchoolDto;
+import com.springboot.crudoperation.model.SearchRequest;
 import com.springboot.crudoperation.repository.SchoolRepository;
 import com.springboot.crudoperation.service.SchoolService;
 import com.springboot.crudoperation.valitation.SchoolDataValidation;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SchoolServiceImpl implements SchoolService {
@@ -66,5 +70,16 @@ public class SchoolServiceImpl implements SchoolService {
         }else
             throw new DataNotFoundException("Record not found!");
 
+    }
+
+    @Override
+    public List<SchoolDto> findSchoolBySearchText(String searchText) {
+        List<School> schools = schoolRepository.findSchoolBySearchText(searchText);
+        return schools.stream().map(school -> SchoolMapper.maptoSchoolDto(school)).collect(Collectors.toList());
+      /*  List<SchoolDto> schoolDtos = new ArrayList<>();
+        for (School school:schools) {
+            schoolDtos.add(SchoolMapper.maptoSchoolDto(school));
+        }
+        return schoolDtos;*/
     }
 }
