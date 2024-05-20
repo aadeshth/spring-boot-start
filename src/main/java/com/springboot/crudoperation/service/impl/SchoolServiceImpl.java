@@ -3,12 +3,17 @@ package com.springboot.crudoperation.service.impl;
 import com.springboot.crudoperation.entity.School;
 import com.springboot.crudoperation.exception.DataNotFoundException;
 import com.springboot.crudoperation.mapper.SchoolMapper;
+import com.springboot.crudoperation.model.PageResponse;
 import com.springboot.crudoperation.model.SchoolDto;
 import com.springboot.crudoperation.model.SearchRequest;
 import com.springboot.crudoperation.repository.SchoolRepository;
 import com.springboot.crudoperation.service.SchoolService;
 import com.springboot.crudoperation.valitation.SchoolDataValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -81,5 +86,41 @@ public class SchoolServiceImpl implements SchoolService {
             schoolDtos.add(SchoolMapper.maptoSchoolDto(school));
         }
         return schoolDtos;*/
+    }
+
+    @Override
+    public PageResponse findAll(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()  : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<School> page = schoolRepository.findAll(pageable);
+        List<School> listOfSchool = page.getContent();
+        List<SchoolDto> listDto = listOfSchool.stream().map(school -> SchoolMapper.maptoSchoolDto(school)).collect(Collectors.toList());
+        PageResponse pageResponse = new PageResponse();
+        pageResponse.setListData(listDto);
+        pageResponse.setPageNo(page.getNumber());
+        pageResponse.setPageSize(page.getSize());
+        pageResponse.setTotalPages(page.getTotalPages());
+        pageResponse.setLast(page.isLast());
+        pageResponse.setTotalRecords(page.getTotalElements());
+
+        return pageResponse;
+    }
+
+    @Override
+    public PageResponse searchAll(String searchText, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()  : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<School> page = schoolRepository.findSchoolBySearchTextWithPagination(searchText, pageable);
+        List<School> listOfSchool = page.getContent();
+        List<SchoolDto> listDto = listOfSchool.stream().map(school -> SchoolMapper.maptoSchoolDto(school)).collect(Collectors.toList());
+        PageResponse pageResponse = new PageResponse();
+        pageResponse.setListData(listDto);
+        pageResponse.setPageNo(page.getNumber());
+        pageResponse.setPageSize(page.getSize());
+        pageResponse.setTotalPages(page.getTotalPages());
+        pageResponse.setLast(page.isLast());
+        pageResponse.setTotalRecords(page.getTotalElements());
+
+        return pageResponse;
     }
 }

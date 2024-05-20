@@ -1,5 +1,6 @@
 package com.springboot.crudoperation.service;
 
+import com.springboot.crudoperation.model.PageResponse;
 import com.springboot.crudoperation.model.SchoolDto;
 import com.springboot.crudoperation.model.SearchRequest;
 
@@ -16,4 +17,8 @@ public interface SchoolService {
       void deleteSchool(int schoolId);
 
       List<SchoolDto> findSchoolBySearchText(String searchText);
+
+      PageResponse findAll(int pageNo, int pageSize, String sortBy, String sortDir);
+
+      PageResponse searchAll(String searchText,int pageNo, int pageSize, String sortBy, String sortDir);
 }

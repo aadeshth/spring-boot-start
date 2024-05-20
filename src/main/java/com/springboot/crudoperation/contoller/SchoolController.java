@@ -86,4 +86,17 @@ public School getSchoolDetails2()
         System.out.println(list);
         return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").listData(Collections.singletonList(list)).build(), HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<?> getSchools(@RequestParam(value = "pageNo") int pageNo, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "sortBy") String sortBy,  @RequestParam(value = "sortDir") String sortDir)
+    {
+        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").data(schoolService.findAll(pageNo,pageSize,sortBy,sortDir)).build(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/searchall")
+    public ResponseEntity<?> getSchools(@RequestParam(value = "searchText" , required = false) String searchText,@RequestParam(value = "pageNo") int pageNo, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "sortBy") String sortBy,  @RequestParam(value = "sortDir") String sortDir)
+    {
+        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").data(schoolService.searchAll(searchText,pageNo,pageSize,sortBy,sortDir)).build(), HttpStatus.OK);
+    }
 }

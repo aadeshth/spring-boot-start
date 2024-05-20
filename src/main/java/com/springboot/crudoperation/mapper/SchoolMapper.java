@@ -16,7 +16,7 @@ public class SchoolMapper {
     public static School mapToSchool(SchoolDto schoolDto, String user) {
         School school = new School();
         school.setName(schoolDto.getName());
-        school.setAddress(schoolDto.getName());
+        school.setAddress(schoolDto.getAddress());
         school.setDressCodeColors(schoolDto.getDressCodeColors());
         school.setCreatedBy(user);
         school.setCreatedDate(Date.valueOf(LocalDate.now()));
