@@ -49,6 +49,7 @@ public School getSchoolDetails2()
     @GetMapping(value = "/{schoolId}")
     public ResponseEntity<?> getSchoolDetailsPath(@PathVariable int schoolId)
     {
+
         return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Fetched Successfully").data(schoolService.findSchoolById(schoolId)).build(), HttpStatus.OK);
     }
 

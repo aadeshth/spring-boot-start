@@ -19,4 +19,5 @@ public interface SchoolRepository extends JpaRepository<School,Long> {
     @Query("SELECT s FROM School s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%',:searchText,'%')) OR LOWER(s.address) LIKE LOWER(CONCAT('%',:searchText,'%'))")
     Page<School> findSchoolBySearchTextWithPagination(@Param("searchText") String searchText, Pageable pageable);
 
+    Page<School> findAll(Pageable pageable);
 }

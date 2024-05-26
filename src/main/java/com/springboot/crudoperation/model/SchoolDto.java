@@ -23,6 +23,8 @@ public class SchoolDto {
 
     String updatedBy;
 
+    List<ClassRoomDto> classRooms;
+
 
 
 }

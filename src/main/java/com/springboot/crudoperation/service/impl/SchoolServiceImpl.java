@@ -5,7 +5,6 @@ import com.springboot.crudoperation.exception.DataNotFoundException;
 import com.springboot.crudoperation.mapper.SchoolMapper;
 import com.springboot.crudoperation.model.PageResponse;
 import com.springboot.crudoperation.model.SchoolDto;
-import com.springboot.crudoperation.model.SearchRequest;
 import com.springboot.crudoperation.repository.SchoolRepository;
 import com.springboot.crudoperation.service.SchoolService;
 import com.springboot.crudoperation.valitation.SchoolDataValidation;
@@ -15,10 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +36,7 @@ public class SchoolServiceImpl implements SchoolService {
     return schoolDto;
     }
 
+    @Transactional
     @Override
     public SchoolDto updateSchool(SchoolDto schoolDto) {
         Optional<School> optionalData = schoolRepository.findByIdAndIsDeleted(schoolDto.getId(),0);
@@ -44,11 +44,12 @@ public class SchoolServiceImpl implements SchoolService {
             School school = optionalData.get();
             if(!schoolDto.getName().isEmpty())
             school.setName(schoolDto.getName());
-
             school.setUpdatedBy("Admin");
             school.setUpdatedDate(Date.valueOf(LocalDate.now()));
             schoolRepository.save(school);
-            return SchoolMapper.maptoSchoolDto(school);
+            // stroring logs
+            // sending data to another MS to save or perform operation
+            return SchoolMapper.mapToSchoolDto(school);
         }else
             throw new DataNotFoundException("Record not found!");
     }
@@ -57,7 +58,7 @@ public class SchoolServiceImpl implements SchoolService {
     public SchoolDto findSchoolById(int schoolId) {
           Optional<School> optionalData = schoolRepository.findByIdAndIsDeleted((long) schoolId,0);
         if(optionalData.isPresent()) {
-            return SchoolMapper.maptoSchoolDto(optionalData.get());
+            return SchoolMapper.mapToSchoolDto(optionalData.get());
         }else
             throw new DataNotFoundException("Record not found!");
 
@@ -79,8 +80,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public List<SchoolDto> findSchoolBySearchText(String searchText) {
-        List<School> schools = schoolRepository.findSchoolBySearchText(searchText);
-        return schools.stream().map(school -> SchoolMapper.maptoSchoolDto(school)).collect(Collectors.toList());
+        return SchoolMapper.mapToListSchoolDto(schoolRepository.findSchoolBySearchText(searchText));
       /*  List<SchoolDto> schoolDtos = new ArrayList<>();
         for (School school:schools) {
             schoolDtos.add(SchoolMapper.maptoSchoolDto(school));
@@ -94,7 +94,7 @@ public class SchoolServiceImpl implements SchoolService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<School> page = schoolRepository.findAll(pageable);
         List<School> listOfSchool = page.getContent();
-        List<SchoolDto> listDto = listOfSchool.stream().map(school -> SchoolMapper.maptoSchoolDto(school)).collect(Collectors.toList());
+        List<SchoolDto> listDto = listOfSchool.stream().map(school -> SchoolMapper.mapToSchoolDto(school)).collect(Collectors.toList());
         PageResponse pageResponse = new PageResponse();
         pageResponse.setListData(listDto);
         pageResponse.setPageNo(page.getNumber());
@@ -109,10 +109,11 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     public PageResponse searchAll(String searchText, int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()  : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        Page<School> page = schoolRepository.findSchoolBySearchTextWithPagination(searchText, pageable);
+        int newPageSize = pageSize == 0 ? 1 : pageSize;
+        Pageable pageable = PageRequest.of(pageNo, newPageSize, sort);
+        Page<School> page =  searchText == null || searchText.isEmpty() ? schoolRepository.findAll(pageable) : schoolRepository.findSchoolBySearchTextWithPagination(searchText, pageable);
         List<School> listOfSchool = page.getContent();
-        List<SchoolDto> listDto = listOfSchool.stream().map(school -> SchoolMapper.maptoSchoolDto(school)).collect(Collectors.toList());
+        List<SchoolDto> listDto = listOfSchool.stream().map(school -> SchoolMapper.mapToSchoolDto(school)).collect(Collectors.toList());
         PageResponse pageResponse = new PageResponse();
         pageResponse.setListData(listDto);
         pageResponse.setPageNo(page.getNumber());
