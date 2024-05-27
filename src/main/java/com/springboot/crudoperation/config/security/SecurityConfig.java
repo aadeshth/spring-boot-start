@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("user")).roles("USER")
-                .and().withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+                .and().withUser("admin").password(passwordEncoder().encode("admin")).roles("USER","ADMIN");
     }
     @Bean
     public PasswordEncoder passwordEncoder()
@@ -26,9 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/school/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/school/*").hasRole("USER")
+        http.csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.POST,"/school/**","/school").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/school/**","/school").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/school/**","/school").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH,"/school/**","/school").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/**", "/school/**").hasAnyRole("USER","ADMIN")
                 .and().formLogin().and().httpBasic();
     }
 }

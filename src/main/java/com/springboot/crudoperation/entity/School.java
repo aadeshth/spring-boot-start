@@ -8,19 +8,18 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "School")
-@Table(name = "school_tbl")
+@Table(name = "School")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@Data
 public class School extends BaseEntity {
     String name;
     String address;
     String dressCodeColors;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "School_Id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
     List<ClassRoom> classRoomList;
 }

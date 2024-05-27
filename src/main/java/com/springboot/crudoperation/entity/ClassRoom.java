@@ -6,13 +6,13 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 
 @Entity(name = "ClassRoom")
-@Table(name = "classroom_tbl")
+@Table(name = "ClassRoom")
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@Data
 public class ClassRoom extends BaseEntity {
 
     String name;
