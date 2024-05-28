@@ -21,11 +21,8 @@ public class BaseEntity {
     @GenericGenerator(name = "native",strategy = "native")
     Long id;
     Date createdDate;
-
     String createdBy;
     Date updatedDate;
-
     String updatedBy;
-
     int isDeleted;
 }
