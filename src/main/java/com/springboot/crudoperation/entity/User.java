@@ -24,7 +24,7 @@ public class User extends BaseEntity implements UserDetails {
     String firstName;
     String lastName;
     String emailId;
-    String userName;
+    String username;
     String password;
 
     @Override
@@ -34,7 +34,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override

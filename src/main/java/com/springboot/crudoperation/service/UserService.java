@@ -1,5 +1,6 @@
 package com.springboot.crudoperation.service;
 
+import com.springboot.crudoperation.entity.User;
 import com.springboot.crudoperation.exception.UserExistException;
 import com.springboot.crudoperation.model.UserDto;
 
@@ -9,7 +10,5 @@ public interface UserService {
 
     UserDto signup(UserDto request);
 
-    UserDto login(UserDto request);
-
-    UserDto logout(UserDto request);
+    User login(UserDto request);
 }
