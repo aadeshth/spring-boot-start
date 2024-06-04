@@ -35,7 +35,8 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestBody UserDto request) {
         User user = userService.login(request);
-        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Login Successfully").data(LoginResponse.builder().token(jwtService.generateToken(user)).expired(jwtService.getExpiryTime()).build()).build(), HttpStatus.OK);
+        LoginResponse response = LoginResponse.builder().token(jwtService.generateToken(user)).expired(jwtService.getExpiryTime()).build();
+        return new ResponseEntity<>(ResponseDto.builder().statusCode(HttpStatus.OK.value()).message("Login Successfully").data(response).build(), HttpStatus.OK);
     }
 
 }

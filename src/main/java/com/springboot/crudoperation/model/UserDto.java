@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+    Long id;
     String firstName;
     String lastName;
     String emailId;

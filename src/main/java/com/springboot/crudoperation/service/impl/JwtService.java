@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.swagger.v3.oas.annotations.servers.Server;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,11 +24,9 @@ public class JwtService {
     @Value("${jwt.security.secret-key}")
     String secreteKey;
 
+    @Getter
     @Value("${jwt.security.expiry-time}")
     long expiryTime;
-
-
-    // extractUsername() by passing token
 
     public String extractName(String token){
         return extractClaims(token, Claims::getSubject);
@@ -56,7 +55,16 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyData);
     }
 
-    public long getExpiryTime() {
-        return expiryTime;
+    public Date extractExpiration(String token) {
+        return extractClaims(token, Claims::getExpiration);
+    }
+    // token expiration time = 04-06-2024 08.56.00 AM ,
+    // current date : 04-06-2024 08.55.00 AM
+    public boolean isExpireToken(String token){
+        return extractExpiration(token).after(new Date());
+    }
+
+    public boolean isTokenValid(String token,UserDetails userDetails){
+        return (extractName(token).equals(userDetails.getUsername()) && isExpireToken(token));
     }
 }
