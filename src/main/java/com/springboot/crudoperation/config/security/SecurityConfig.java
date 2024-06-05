@@ -10,9 +10,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
-@EnableWebSecurity
+
+//@Configuration
+//@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    /*@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("user")).roles("USER")
+                .and().withUser("admin").password(passwordEncoder().encode("admin")).roles("USER","ADMIN");
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder()
+    {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,5 +35,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PATCH,"/school/**","/school").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/**", "/school/**").hasAnyRole("USER","ADMIN")
                 .and().httpBasic();
-    }
+    }*/
 }

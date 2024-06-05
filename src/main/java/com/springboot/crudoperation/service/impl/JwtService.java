@@ -1,12 +1,10 @@
 package com.springboot.crudoperation.service.impl;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -28,7 +25,7 @@ public class JwtService {
     @Value("${jwt.security.expiry-time}")
     long expiryTime;
 
-    public String extractName(String token){
+    public String extractUsername(String token){
         return extractClaims(token, Claims::getSubject);
     }
 
@@ -65,6 +62,6 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token,UserDetails userDetails){
-        return (extractName(token).equals(userDetails.getUsername()) && isExpireToken(token));
+        return (extractUsername(token).equals(userDetails.getUsername()) && isExpireToken(token));
     }
 }
