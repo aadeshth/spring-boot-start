@@ -13,10 +13,6 @@ import java.util.Optional;
 public interface SchoolRepository extends JpaRepository<School,Long> {
     Optional<School> findByIdAndIsDeleted(Long id, int isDeleted);
 
-    List<School> findByNameAndAddress(String name);
-
-    List<School> findByNameOrAddressOrDressCodeColorsContains(String searchText);
-
     @Query("SELECT s FROM School s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%',:searchText,'%')) OR LOWER(s.address) LIKE LOWER(CONCAT('%',:searchText,'%'))")
     List<School> findSchoolBySearchText(@Param("searchText") String searchText);
 

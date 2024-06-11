@@ -8,19 +8,19 @@ import com.springboot.crudoperation.model.UserDto;
 import com.springboot.crudoperation.repository.UserRepository;
 import com.springboot.crudoperation.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    JwtService jwtService;
+    AuthenticationManager authenticationManager;
 
-    //@Autowired
-    //AuthenticationManager authenticationManager;
-
-   // @Autowired
-    //PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     UserRepository userRepository;
@@ -38,12 +38,15 @@ public class UserServiceImpl implements UserService {
         if(user != null)
             throw new UserExistException("User is present! Please enter different username!");
         User userForDB = UserMapper.mapToUser(request);
+        userForDB.setPassword(passwordEncoder.encode(request.getPassword()));
         return UserMapper.mapToUserDto(userRepository.save(userForDB));
     }
 
     @Override
     public User login(UserDto request) {
-        //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUserName(),passwordEncoder.encode(request.getPassword())));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),request.getPassword()));
 
         return  userRepository.findByUsername(request.getUsername());
     }
